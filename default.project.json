@@ -3,9 +3,7 @@
   "tree": {
     "$className": "DataModel",
 
-    "ReplicatedStorage": {
-      "$ignoreUnknownInstances": true,
-
+    "ReplicatedStorage": {      
       "State": {
         "$path": "src"
       },
