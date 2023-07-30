@@ -13,7 +13,7 @@ type StateProcessor = Types.StateProcessor
 type StateCallback = Types.StateCallback
 type StateGetter = Types.StateGetter
 type State = Types.State
-type Processor<A, B> = Types.Processor<A, B>
+type Processor<ValueType, T> = Types.Processor<ValueType, T>
 
 local Is = Processor.GetWrapper("Is")
 
@@ -93,9 +93,9 @@ function State:Get()
         if not isValid then
          return false
         end
-     end
+    end
 
-     return true
+    return true
 end
 
 function State:Connect(stateCallback: StateCallback): Janitor

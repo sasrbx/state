@@ -27,9 +27,9 @@ export type IsNot<T> = Processor<"IsNot", T>
 -- All comparison wrappers should only work for types that are comparable
 export type Comparable = number | string | {
 	-- @TODO: there is no good way to check if a table has valid metamethods with the current state of typed Luau :(
-	__eq: any,
-	__lt: any,
-	__le: any,
+	__eq: (self: Comparable, v: any) -> boolean,
+	__lt: (self: Comparable, v: any) -> boolean,
+	__le: (self: Comparable, v: any) -> boolean,
 }
 
 export type IsGreaterThan = Processor<"IsGreaterThan", Comparable>
