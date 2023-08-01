@@ -79,26 +79,33 @@ local function process(instance: Instance, instanceState: InstanceState): boolea
     return areAttributesValid(instance, instanceState) and arePropertiesValid(instance, instanceState) and areTagsValid(instance, instanceState)
 end
 
-function State.new(stateProcessor: StateProcessor): State
+function State.new(stateProcessor: StateProcessor, transformState: ((isEnabled: boolean) -> any)?): State
     local self: State = setmetatable({}, State) :: State
     self._stateProcessor = stateProcessor
+    self._transformState = transformState
     self._janitor = Janitor.new()
 
     return self
 end
 
 function State:Get()
+    local isEnabled: boolean = true
     for instance, instanceState in self._stateProcessor do
         local isValid = process(instance, instanceState)
         if not isValid then
-         return false
+            isEnabled = false
+            break
         end
     end
 
-    return true
+    if self._transformState then
+        return self._transformState(isEnabled)
+    else
+        return isEnabled   
+    end
 end
 
-function State:Connect(stateCallback: StateCallback): Janitor
+function State:Observe(stateCallback: StateCallback): Janitor
     local stateJanitor: Janitor = self._janitor:Add(Janitor.new())
 
     local function callStateCallback()

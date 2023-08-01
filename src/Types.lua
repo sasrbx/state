@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 
 export type StateListing<T> = { [string]: T }
-export type StateCallback = (isEnabled: boolean) -> ()
+export type StateCallback = (state: any) -> ()
 export type StateGetter = () -> boolean
 export type InstanceState = {
 	Attributes: StateListing<any>?,
@@ -39,10 +39,11 @@ export type IsLessThanOrEqual = Processor<"IsLessThanOrEqual", Comparable>
 
 export type State = {
 	Get: (self: State) -> boolean,
-	Connect: (self: State, stateCallback: StateCallback) -> Janitor.Janitor,
+	Observe: (self: State, stateCallback: StateCallback) -> Janitor.Janitor,
 	Destroy: (self: State) -> (),
 
 	_stateProcessor: StateProcessor,
+	_transformState: ((isEnabled: boolean) -> any)?,
 	_janitor: Janitor.Janitor,
 }
 
